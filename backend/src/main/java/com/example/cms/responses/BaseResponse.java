@@ -11,4 +11,9 @@ import lombok.Setter;
 public class BaseResponse {
     private Integer status_code;
     private Object message;
+
+    @Override
+    public String toString() {
+        return "{\"status\": " + status_code + ",\n\"message\":\"" + message + "\"}";
+    }
 }

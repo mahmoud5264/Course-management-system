@@ -12,14 +12,14 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class User {
     private UUID id;
-    private String user_name;
+    private String username;
     private String email;
-    private String password ;
+    private String password;
     private String type;
-    private String first_name;
-    private String last_name;
-    private String date_of_birth;
-    private String is_verified;
+    private String firstname;
+    private String lastname;
+    private String dateOfBirth;
+    private String isVerified;
 }

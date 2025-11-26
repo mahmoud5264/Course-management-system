@@ -1,7 +1,7 @@
 package com.example.cms.config;
 
 
-import com.example.cms.repositories.AccountRepository;
+import com.example.cms.repositories.UserRepository;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.postgres.PostgresPlugin;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
@@ -22,8 +22,8 @@ public class JdbiConfig {
     }
 
     @Bean
-    public AccountRepository accountRepository(Jdbi jdbi) {
-        return jdbi.onDemand(AccountRepository.class);
+    public UserRepository userRepository(Jdbi jdbi) {
+        return jdbi.onDemand(UserRepository.class);
     }
 
 }
