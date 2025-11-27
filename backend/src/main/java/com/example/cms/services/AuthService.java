@@ -4,6 +4,7 @@ package com.example.cms.services;
 import com.example.cms.exceptions.ALreadyExistsException;
 import com.example.cms.models.User;
 import com.example.cms.repositories.UserRepository;
+import com.example.cms.requests.UserLoginRequest;
 import com.example.cms.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +20,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
-    public String signup(User user){
+    public void signup(UserLoginRequest user){
         Boolean exists = userRepository.checkUserExistByUsername(user.getUsername());
         if(exists){
             throw new ALreadyExistsException("Username already exists");
@@ -33,10 +34,9 @@ public class AuthService {
         if(rows==0){
             throw new RuntimeException("Bad request");
         }
-        return "Success";
     }
 
-    public String signin(User user){
+    public String signin(UserLoginRequest user){
         User userDB = userRepository.getUserByEmail(user.getEmail());
         if(userDB==null){
             throw new UsernameNotFoundException("Email not found");

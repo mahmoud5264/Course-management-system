@@ -1,27 +1,19 @@
-package com.example.cms.models;
+package com.example.cms.dto;
 
-
-import com.example.cms.dto.UserDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class User {
+@Setter
+public class UserDto {
     private UUID id;
     private String username;
     private String email;
-    private String password;
     private String type;
     private String firstname;
     private String lastname;
     private LocalDate dateOfBirth;
-    private String isVerified;
 }
