@@ -8,6 +8,7 @@ import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +34,8 @@ public interface UserRepository extends SqlObject {
     @SqlQuery("SELECT * FROM users where id = :id")
     User getUserById(@Bind UUID id);
 
+    @SqlUpdate("UPDATE USERS SET firstname= :firstname, lastname= :lastname, dateOfBirth= :dateOfBirth WHERE id= :id")
+    void editUser(@Bind String firstname, @Bind String lastname, @Bind LocalDate dateOfBirth, @Bind UUID id);
 
     @SqlUpdate("insert into users (id, username, email, password, usertype) values (gen_random_uuid(), :username, :email, :password, 'Student')")
     int addUser(@Bind String username, @Bind String email, @Bind String password);
