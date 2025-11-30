@@ -7,12 +7,15 @@ import com.example.cms.requests.UserLoginRequest;
 import com.example.cms.responses.BaseResponse;
 import com.example.cms.services.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Log4j2
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -40,6 +43,7 @@ public class AuthController {
             BaseResponse baseResponse = new BaseResponse(400, "Please fill the request fields");
             return ResponseEntity.status(400).body(baseResponse);
         }
+        log.info("Login request from user: "+user.getEmail());
         try{
             String token = authService.signin(user);
             return ResponseEntity.ok(new BaseResponse(200, token));

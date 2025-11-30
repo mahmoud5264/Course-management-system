@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" monitorInterval="30">
+    <Properties>
+        <!-- default folder and filename; override with -DLOG_PATH or -Dspring.application.name -->
+        <Property name="LOG_PATH">${sys:LOG_PATH:-logs/api}</Property>
+        <Property name="APP_NAME">${sys:spring.application.name:-app}</Property>
+        <Property name="FILE_NAME">${LOG_PATH}/${APP_NAME}.log</Property>
+        <Property name="FILE_PATTERN">${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.%i.log.gz</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Console output (stdout) -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %c{36} - %m%n"/>
+        </Console>
+
+        <!-- Rolling file appender (time + size) -->
+        <RollingFile name="FileAppender"
+                     fileName="${FILE_NAME}"
+                     filePattern="${FILE_PATTERN}"
+                     append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %c{36} - %m%n%ex{full}"/>
+            <Policies>
+                <!-- roll every day -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!-- or roll when size exceeds 10MB during the day -->
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- keep up to 30 rollover files -->
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+        <!-- Optional: Error-only rolling file -->
+        <RollingFile name="ErrorFile"
+                     fileName="${LOG_PATH}/${APP_NAME}-error.log"
+                     filePattern="${LOG_PATH}/${APP_NAME}-error.%d{yyyy-MM-dd}.%i.log.gz"
+                     append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %c{36} - %m%n%ex{full}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="5MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="60"/>
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+
+        <!-- Optional Async wrapper (recommended for non-blocking IO) -->
+        <Async name="AsyncFile">
+            <AppenderRef ref="FileAppender"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.example" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="AsyncFile"/>
+        </Logger>
+
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="AsyncFile"/>
+            <AppenderRef ref="ErrorFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
